@@ -115,4 +115,13 @@ int main() {
     InitWindow(width, height, "Flow Field - 50 Curves");
     SetTargetFPS(60);
 
+    initPermutationTable();
+
+    while (!WindowShouldClose()) {
+        // Update grid
+        for (int column = 0; column < num_columns; column++) {
+            for (int row = 0; row < num_rows; row++) {
+                float scaledX = column * 0.005f;
+                float scaledY = row * 0.005f;
+                float noiseVal = noise(scaledX, scaledY);
 }
