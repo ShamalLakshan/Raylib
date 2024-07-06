@@ -124,4 +124,8 @@ int main() {
                 float scaledX = column * 0.005f;
                 float scaledY = row * 0.005f;
                 float noiseVal = noise(scaledX, scaledY);
+                float angle = noiseVal * (2 * MY_PI);
+                grid[column][row] = angle;
+            }
+        }
 }
