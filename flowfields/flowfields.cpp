@@ -2,11 +2,47 @@
 #include <vector>
 #include <cmath>
 #include <random>
+#include <algorithm>
+
+
+// Function prototypes
+float fade(float t);
+float lerp(float t, float a, float b);
+float grad(int hash, float x, float y);
+float noise(float x, float y);
+
+// Permutation table
+std::vector<int> p(256);
+
+// Initialize the permutation table
+void initPermutationTable() {
+    for (int i = 0; i < 256; i++) {
+        p[i] = i;
+    }
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(p.begin(), p.end(), g);
+    p.insert(p.end(), p.begin(), p.end()); // Duplicate the array
+}
+
+// Helper functions for Perlin noise
+float fade(float t) { 
+    return t * t * t * (t * (t * 6 - 15) + 10); 
+}
+
+float lerp(float t, float a, float b) { 
+    return a + t * (b - a); 
+}
+
+float grad(int hash, float x, float y) {
+    int h = hash & 15;
+    float u = h < 8 ? x : y;
+    float v = h < 4 ? y : (h == 12 || h == 14 ? x : 0);
+    return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
+}
 
 // Perlin noise function
 float noise(float x, float y) {
-    // This is a simple implementation of Perlin noise
-    // For a more accurate version, you might want to use a library or implement the full algorithm
     const float SEED = 1337.0f;
     x += SEED;
     y += SEED;
@@ -20,17 +56,6 @@ float noise(float x, float y) {
     return lerp(v, lerp(u, grad(p[A], x, y), grad(p[B], x - 1, y)),
                 lerp(u, grad(p[A + 1], x, y - 1), grad(p[B + 1], x - 1, y - 1)));
 }
-
-// Helper functions for Perlin noise
-float fade(float t) { return t * t * t * (t * (t * 6 - 15) + 10); }
-float lerp(float t, float a, float b) { return a + t * (b - a); }
-float grad(int hash, float x, float y) {
-    int h = hash & 15;
-    float u = h < 8 ? x : y;
-    float v = h < 4 ? y : (h == 12 || h == 14 ? x : 0);
-    return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
-}
-
 
 
 int main(){
@@ -62,9 +87,12 @@ int main(){
         //Event Handling
 
         //Updating Positions
-        for (int column = 0; column < num_columns; ++column) {
-            for (int row = 0; row < num_rows; ++row) {
-                float angle = (static_cast<float>(row) / num_rows) * PI;
+        for (int column = 0; column < num_columns; column++) {
+            for (int row = 0; row < num_rows; row++) {
+                float scaledX = column * 0.005f;
+                float scaledY = row * 0.005f;
+                float noiseVal = noise(scaledX, scaledY);
+                float angle = noiseVal * (2 * PI);
                 grid[column][row] = angle;
             }
         }
