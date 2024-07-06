@@ -68,3 +68,17 @@ std::vector<Vector2> generateCurve(float startX, float startY, const std::vector
 
         int column_index = static_cast<int>(x_offset / resolution);
         int row_index = static_cast<int>(y_offset / resolution);
+
+        if (column_index >= 0 && column_index < grid.size() &&
+            row_index >= 0 && row_index < grid[0].size()) {
+            float grid_angle = grid[column_index][row_index];
+
+            float x_step = step_length * cos(grid_angle);
+            float y_step = step_length * sin(grid_angle);
+
+            x = x + x_step;
+            y = y + y_step;
+        } else {
+            break;
+        }
+    }
