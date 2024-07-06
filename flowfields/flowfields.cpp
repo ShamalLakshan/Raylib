@@ -139,4 +139,15 @@ int main() {
         for (int i = 0; i < num_curves; ++i) {
             float startX = static_cast<float>(GetRandomValue(0, width));
             float startY = static_cast<float>(GetRandomValue(0, height));
+
+            std::vector<Vector2> curvePoints = generateCurve(startX, startY, grid, left_x, top_y, resolution, num_steps, step_length);
+
+            // Draw the curve
+            if (curvePoints.size() > 1) {
+                Color curveColor = getRandomColor();
+                for (size_t j = 0; j < curvePoints.size() - 1; ++j) {
+                    DrawLineV(curvePoints[j], curvePoints[j + 1], curveColor);
+                }
+            }
+        }
 }
