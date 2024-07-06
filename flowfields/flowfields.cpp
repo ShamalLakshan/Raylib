@@ -134,4 +134,9 @@ int main() {
         const int num_curves = 500;  // Number of curves to display
         const int num_steps = 1000;
         const float step_length = 5.0f;
+        
+        // Generate and draw multiple curves
+        for (int i = 0; i < num_curves; ++i) {
+            float startX = static_cast<float>(GetRandomValue(0, width));
+            float startY = static_cast<float>(GetRandomValue(0, height));
 }
