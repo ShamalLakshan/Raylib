@@ -105,6 +105,14 @@ int main() {
     int top_y = (height * -0.5);
     int bottom_y = (height * 1.5);
 
+    int resolution = (width * 0.01);
 
-    
+    int num_columns = (right_x - left_x) / resolution;
+    int num_rows = (bottom_y - top_y) / resolution;
+
+    std::vector<std::vector<float>> grid(num_columns, std::vector<float>(num_rows));
+
+    InitWindow(width, height, "Flow Field - 50 Curves");
+    SetTargetFPS(60);
+
 }
