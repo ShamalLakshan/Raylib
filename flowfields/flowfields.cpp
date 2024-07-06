@@ -43,30 +43,48 @@ int main(){
         ClearBackground(WHITE);
 
 
-        float cellWidth = static_cast<float>(screenWidth) / num_columns;
-        float cellHeight = static_cast<float>(screenHeight) / num_rows;
+        const int num_steps = 1000;  // Adjust as needed
+        const float step_length = 5.0f;  // Adjust as needed
         
-        for (int column = 0; column < num_columns; ++column) {
-            for (int row = 0; row < num_rows; ++row) {
-                float angle = grid[column][row];
-                
-                // Calculate the center of each cell
-                Vector2 center = {
-                    column * cellWidth + cellWidth / 2,
-                    row * cellHeight + cellHeight / 2
-                };
-                
-                // Calculate the end point of the line based on the angle
-                Vector2 end = {
-                    center.x + cos(angle) * (cellWidth / 2),
-                    center.y + sin(angle) * (cellHeight / 2)
-                };
-                
-                // Draw a line representing the angle
-                DrawLineEx(center, end, 2, BLACK);
+        // Starting point
+        float x = 500.0f;
+        float y = 100.0f;
+        
+        // Create a vector to store the points of the curve
+        std::vector<Vector2> curvePoints;
+        
+        for (int n = 0; n < num_steps; ++n) {
+            curvePoints.push_back({x, y});
+        
+            float x_offset = x - left_x;
+            float y_offset = y - top_y;
+        
+            int column_index = static_cast<int>(x_offset / resolution);
+            int row_index = static_cast<int>(y_offset / resolution);
+        
+            // Check bounds to prevent out-of-range access
+            if (column_index >= 0 && column_index < grid.size() &&
+                row_index >= 0 && row_index < grid[0].size()) {
+                float grid_angle = grid[column_index][row_index];
+        
+                float x_step = step_length * cos(grid_angle);
+                float y_step = step_length * sin(grid_angle);
+        
+                x = x + x_step;
+                y = y + y_step;
+            } else {
+                // Handle out-of-bounds case (e.g., stop the curve or wrap around)
+                break;
             }
         }
-
+        
+        // Draw the curve
+        if (curvePoints.size() > 1) {
+            for (size_t i = 0; i < curvePoints.size() - 1; ++i) {
+                DrawLineV(curvePoints[i], curvePoints[i + 1], RED);
+            }
+        }
+                
 
         EndDrawing(); //End Canvas Drawing
     }
