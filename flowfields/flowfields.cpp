@@ -59,3 +59,12 @@ std::vector<Vector2> generateCurve(float startX, float startY, const std::vector
     std::vector<Vector2> curvePoints;
     float x = startX;
     float y = startY;
+
+    for (int n = 0; n < num_steps; ++n) {
+        curvePoints.push_back({x, y});
+
+        float x_offset = x - left_x;
+        float y_offset = y - top_y;
+
+        int column_index = static_cast<int>(x_offset / resolution);
+        int row_index = static_cast<int>(y_offset / resolution);
