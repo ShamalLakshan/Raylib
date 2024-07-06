@@ -128,4 +128,10 @@ int main() {
                 grid[column][row] = angle;
             }
         }
+        BeginDrawing();
+        ClearBackground(WHITE);
+
+        const int num_curves = 500;  // Number of curves to display
+        const int num_steps = 1000;
+        const float step_length = 5.0f;
 }
