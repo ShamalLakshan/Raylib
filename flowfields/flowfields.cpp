@@ -38,3 +38,19 @@ float grad(int hash, float x, float y) {
     float v = h < 4 ? y : (h == 12 || h == 14 ? x : 0);
     return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
 }
+
+// Perlin noise function
+float noise(float x, float y) {
+    const float SEED = 1337.0f;
+    x += SEED;
+    y += SEED;
+    int X = (int)floor(x) & 255;
+    int Y = (int)floor(y) & 255;
+    x -= floor(x);
+    y -= floor(y);
+    float u = fade(x);
+    float v = fade(y);
+    int A = p[X] + Y, B = p[X + 1] + Y;
+    return lerp(v, lerp(u, grad(p[A], x, y), grad(p[B], x - 1, y)),
+                lerp(u, grad(p[A + 1], x, y - 1), grad(p[B + 1], x - 1, y - 1)));
+}
