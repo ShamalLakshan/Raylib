@@ -27,3 +27,14 @@ void initPermutationTable() {
 float fade(float t) {
     return t * t * t * (t * (t * 6 - 15) + 10);
 }
+
+float lerp(float t, float a, float b) { 
+    return a + t * (b - a); 
+}
+
+float grad(int hash, float x, float y) {
+    int h = hash & 15;
+    float u = h < 8 ? x : y;
+    float v = h < 4 ? y : (h == 12 || h == 14 ? x : 0);
+    return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
+}
