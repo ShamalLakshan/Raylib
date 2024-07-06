@@ -54,3 +54,8 @@ float noise(float x, float y) {
     return lerp(v, lerp(u, grad(p[A], x, y), grad(p[B], x - 1, y)),
                 lerp(u, grad(p[A + 1], x, y - 1), grad(p[B + 1], x - 1, y - 1)));
 }
+
+std::vector<Vector2> generateCurve(float startX, float startY, const std::vector<std::vector<float>>& grid, int left_x, int top_y, int resolution, int num_steps, float step_length) {
+    std::vector<Vector2> curvePoints;
+    float x = startX;
+    float y = startY;
