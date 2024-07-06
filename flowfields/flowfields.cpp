@@ -82,3 +82,15 @@ std::vector<Vector2> generateCurve(float startX, float startY, const std::vector
             break;
         }
     }
+
+        return curvePoints;
+}
+
+Color getRandomColor() {
+    return { 
+        static_cast<unsigned char>(GetRandomValue(0, 255)),
+        static_cast<unsigned char>(GetRandomValue(0, 255)),
+        static_cast<unsigned char>(GetRandomValue(0, 255)),
+        255
+    };
+}
