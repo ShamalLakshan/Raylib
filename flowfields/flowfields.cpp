@@ -94,3 +94,17 @@ Color getRandomColor() {
         255
     };
 }
+
+int main() {
+    const int width = 400;
+    const int height = 400;
+    const float MY_PI = 3.14159265358979323846f;
+
+    int left_x = (width * -0.5);
+    int right_x = (width * 1.5);
+    int top_y = (height * -0.5);
+    int bottom_y = (height * 1.5);
+
+
+    
+}
