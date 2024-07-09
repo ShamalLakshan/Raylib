@@ -14,6 +14,8 @@ int main(){
 
     Simulation simulation{WINDOW_WIDTH, WINDOW_HEIGHT, CELL_SIZE};
 
+    simulation.SetCellValue(3, 4, 1);
+
 
     while(WindowShouldClose() == false){
         BeginDrawing();
