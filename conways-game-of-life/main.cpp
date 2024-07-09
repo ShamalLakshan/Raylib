@@ -1,71 +1,110 @@
-#include <raylib.h>
-#include <iostream>
-#include "simulation.hpp"
+#include "raylib.h"
+#include <vector>
+#include <random>
+#include <algorithm>
 
-int main()
-{
-    Color GREY = {29, 29, 29, 255};
-    const int WINDOW_WIDTH = 1280;
-    const int WINDOW_HEIGHT = 720;
-    const int CELL_SIZE = 3;
-    int FPS = 12;
+const int kDisplayWidth = 1280;
+const int kDisplayHeight = 720;
+const int kElementSize = 3;
+const int kMatrixWidth = kDisplayWidth / kElementSize;
+const int kMatrixHeight = kDisplayHeight / kElementSize;
 
-    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Game of Life");
-    SetTargetFPS(FPS);
-    Simulation simulation{WINDOW_WIDTH, WINDOW_HEIGHT, CELL_SIZE};
+std::vector<std::vector<int>> currentState(kMatrixWidth, std::vector<int>(kMatrixHeight, 0));
+std::vector<std::vector<int>> futureState(kMatrixWidth, std::vector<int>(kMatrixHeight, 0));
 
-    //Simulation Loop
-    while(WindowShouldClose() == false) 
-    {
-        // 1. Event Handling
-        if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-        {
-            Vector2 mousePosition = GetMousePosition();
-            int row = mousePosition.y / CELL_SIZE;
-            int column = mousePosition.x / CELL_SIZE;
-            simulation.ToggleCell(row, column);
+bool isSimulationPaused = false;
+const int kMaxAge = 10;
+
+void PopulateInitialState() {
+    std::mt19937 randomGen(std::random_device{}());
+    std::uniform_int_distribution<> coinFlip(0, 1);
+
+    for (int i = 0; i < kMatrixWidth; i++) {
+        for (int j = 0; j < kMatrixHeight; j++) {
+            currentState[i][j] = coinFlip(randomGen);
         }
-        if(IsKeyPressed(KEY_ENTER))
-        {
-            simulation.Start();
-            SetWindowTitle("Game of Life is running ...");
+    }
+}
+
+int CalculateLiveNeighbors(int x, int y) {
+    int sum = 0;
+    for (int dx = -1; dx <= 1; dx++) {
+        for (int dy = -1; dy <= 1; dy++) {
+            if (dx == 0 && dy == 0) continue;
+            int nx = (x + dx + kMatrixWidth) % kMatrixWidth;
+            int ny = (y + dy + kMatrixHeight) % kMatrixHeight;
+            sum += (currentState[nx][ny] > 0);
         }
-        else if(IsKeyPressed(KEY_SPACE))
-        {
-            simulation.Stop();
-            SetWindowTitle("Game of Life has stopped.");
-        }
-        else if(IsKeyPressed(KEY_F))
-        {
-            FPS += 2;
-            SetTargetFPS(FPS);
-        }
-        else if(IsKeyPressed(KEY_S))
-        {
-            if(FPS > 5)
-            {
-                FPS -= 2;
-                SetTargetFPS(FPS);
+    }
+    return sum;
+}
+
+void EvolveCellularAutomata() {
+    for (int i = 0; i < kMatrixWidth; i++) {
+        for (int j = 0; j < kMatrixHeight; j++) {
+            int aliveNeighbors = CalculateLiveNeighbors(i, j);
+            if (currentState[i][j] > 0) {
+                futureState[i][j] = (aliveNeighbors == 2 || aliveNeighbors == 3) 
+                    ? std::min(currentState[i][j] + 1, kMaxAge) : 0;
+            } else {
+                futureState[i][j] = (aliveNeighbors == 3) ? 1 : 0;
             }
         }
-        else if(IsKeyPressed(KEY_R))
-        {
-            simulation.CreateRandomState();
-        }
-        else if(IsKeyPressed(KEY_C))
-        {
-            simulation.ClearGrid();
+    }
+    currentState.swap(futureState);
+}
+
+Color DetermineElementColor(int age) {
+    int shade = age * 200 / kMaxAge;
+    return Color{255, 255, 255, static_cast<unsigned char>(255 - shade)};
+}
+
+void RenderGridLines() {
+    for (int i = 0; i <= kMatrixWidth; i++) {
+        DrawLine(i * kElementSize, 0, i * kElementSize, kDisplayHeight, DARKGRAY);
+    }
+    for (int j = 0; j <= kMatrixHeight; j++) {
+        DrawLine(0, j * kElementSize, kDisplayWidth, j * kElementSize, DARKGRAY);
+    }
+}
+
+int main() {
+    InitWindow(kDisplayWidth, kDisplayHeight, "Cellular Automaton Simulator");
+    SetTargetFPS(10);
+
+    PopulateInitialState();
+
+    while (!WindowShouldClose()) {
+        if (IsKeyPressed(KEY_SPACE)) {
+            isSimulationPaused = !isSimulationPaused;
         }
 
-        // 2. Updating State
-        simulation.Update(); 
+        if (!isSimulationPaused) {
+            EvolveCellularAutomata();
+        }
 
-        // 3. Drawing
         BeginDrawing();
-        ClearBackground(GREY);
-        simulation.Draw();
+        ClearBackground(BLACK);
+
+        for (int i = 0; i < kMatrixWidth; i++) {
+            for (int j = 0; j < kMatrixHeight; j++) {
+                if (currentState[i][j] > 0) {
+                    DrawRectangle(i * kElementSize, j * kElementSize, 
+                                  kElementSize, kElementSize, 
+                                  DetermineElementColor(currentState[i][j]));
+                }
+            }
+        }
+
+        RenderGridLines();
+
+        if (isSimulationPaused) {
+            DrawText("SIMULATION PAUSED", 10, 10, 20, RED);
+        }
+
         EndDrawing();
     }
 
     CloseWindow();
+    return 0;
 }
