@@ -1,7 +1,6 @@
-#include "simulation.hpp"
 #include <vector>
-#include<utility>
-
+#include <utility>
+#include "simulation.hpp"
 
 void Simulation::Draw()
 {
@@ -16,7 +15,7 @@ void Simulation::SetCellValue(int row, int column, int value)
 int Simulation::CountLiveNeighbors(int row, int column)
 {
     int liveNeighbors = 0;
-    std::vector<std::pair<int,int>> neighborOffsets = 
+    std::vector<std::pair<int, int>> neighborOffsets = 
     {
         {-1, 0}, // Directly above
         {1, 0},  // Directly below
@@ -39,59 +38,63 @@ int Simulation::CountLiveNeighbors(int row, int column)
 
 void Simulation::Update()
 {
-    if (IsRunning())
+    if(IsRunning())
     {
         for(int row = 0; row < grid.GetRows(); row++)
-    {
-        for(int column = 0; column < grid.GetColumns(); column++)
         {
-            int liveNeighbors = CountLiveNeighbors(row, column);
-            int cellValue = grid.GetValue(row, column);
-
-            if (cellValue == 1)
+            for(int column = 0; column < grid.GetColumns(); column++)
             {
-                if (liveNeighbors > 3 || liveNeighbors < 2)
-                {
-                    tempGrid.SetValue(row, column, 0);
-                }
-                else
-                {
-                    tempGrid.SetValue(row, column, 1);
-                }
+                int liveNeighbors = CountLiveNeighbors(row, column);
+                int cellValue = grid.GetValue(row, column);
                 
-            }
-            else
-            {
-                if (liveNeighbors == 3)
+                if(cellValue == 1)
                 {
-                    tempGrid.SetValue(row, column, 1);
+                    if(liveNeighbors > 3 || liveNeighbors < 2)
+                    {
+                        tempGrid.SetValue(row, column, 0);
+                    }
+                    else
+                    {
+                        tempGrid.SetValue(row, column, 1);
+                    }
                 }
                 else
                 {
-                    tempGrid.SetValue(row, column, 0);
+                    if(liveNeighbors == 3)
+                    {
+                        tempGrid.SetValue(row, column, 1);
+                    }
+                    else
+                    {
+                        tempGrid.SetValue(row, column, 0);
+                    }
                 }
             }
-            
         }
-    }
-    grid = tempGrid;
+        grid = tempGrid;
     }
 }
 
 void Simulation::ClearGrid()
 {
-    if (!IsRunning())
+    if(!IsRunning())
     {
         grid.Clear();
     }
-    
 }
 
 void Simulation::CreateRandomState()
 {
-    if (!IsRunning())
+    if(!IsRunning())
     {
         grid.FillRandom();
     }
-    
+}
+
+void Simulation::ToggleCell(int row, int column)
+{
+    if(!IsRunning())
+    {
+        grid.ToggleCell(row, column);
+    }
 }

@@ -2,71 +2,70 @@
 #include <iostream>
 #include "simulation.hpp"
 
-int main(){
+int main()
+{
+    Color GREY = {29, 29, 29, 255};
     const int WINDOW_WIDTH = 750;
     const int WINDOW_HEIGHT = 750;
-    int FPS = 12;
     const int CELL_SIZE = 25;
+    int FPS = 12;
 
-    Color GREY = {29, 29, 29, 255};
-
-    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Conway's Game of Life");
+    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Game of Life");
     SetTargetFPS(FPS);
-
     Simulation simulation{WINDOW_WIDTH, WINDOW_HEIGHT, CELL_SIZE};
 
-
-    while(WindowShouldClose() == false){
-        //Event Handling
-        if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+    //Simulation Loop
+    while(WindowShouldClose() == false) 
+    {
+        // 1. Event Handling
+        if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+        {
             Vector2 mousePosition = GetMousePosition();
-            int row = mousePosition.x / CELL_SIZE;
-            int column = mousePosition.y / CELL_SIZE;
+            int row = mousePosition.y / CELL_SIZE;
+            int column = mousePosition.x / CELL_SIZE;
+            simulation.ToggleCell(row, column);
         }
-
-        if (IsKeyPressed(KEY_ENTER))
+        if(IsKeyPressed(KEY_ENTER))
         {
             simulation.Start();
-            SetWindowTitle("Game of Life is Running");
+            SetWindowTitle("Game of Life is running ...");
         }
-        else if (IsKeyPressed(KEY_SPACE))
+        else if(IsKeyPressed(KEY_SPACE))
         {
             simulation.Stop();
-            SetWindowTitle("Game of Life is Paused");
+            SetWindowTitle("Game of Life has stopped.");
         }
-        else if (IsKeyPressed(KEY_F))
+        else if(IsKeyPressed(KEY_F))
         {
             FPS += 2;
             SetTargetFPS(FPS);
         }
-        else if (IsKeyPressed(KEY_S))
+        else if(IsKeyPressed(KEY_S))
         {
-            FPS -= 2;
-            SetTargetFPS(FPS);
+            if(FPS > 5)
+            {
+                FPS -= 2;
+                SetTargetFPS(FPS);
+            }
         }
-        else if (IsKeyPressed(KEY_R))
+        else if(IsKeyPressed(KEY_R))
         {
             simulation.CreateRandomState();
         }
-        else if (IsKeyPressed(KEY_C))
+        else if(IsKeyPressed(KEY_C))
         {
             simulation.ClearGrid();
         }
-        
 
-        //Updating State
-        simulation.Update();
+        // 2. Updating State
+        simulation.Update(); 
 
-        //Drawing
+        // 3. Drawing
         BeginDrawing();
         ClearBackground(GREY);
-
         simulation.Draw();
-
         EndDrawing();
     }
 
     CloseWindow();
 }
-
-//1:04

@@ -15,8 +15,9 @@ class Simulation
         void Stop() {run = false;}
         void ClearGrid();
         void CreateRandomState();
+        void ToggleCell(int row, int column);
     private:
-    Grid grid;
-    Grid tempGrid;
-    bool run;
+        Grid grid;
+        Grid tempGrid;
+        bool run;
 };

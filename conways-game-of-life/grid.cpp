@@ -1,9 +1,9 @@
-#include "grid.hpp"
 #include <raylib.h>
+#include "grid.hpp"
 
 void Grid::Draw()
 {
-    for(int row = 0; row < rows; row++)
+    for(int row = 0; row < rows; row ++) 
     {
         for(int column = 0; column < columns; column++)
         {
@@ -15,7 +15,7 @@ void Grid::Draw()
 
 void Grid::SetValue(int row, int column, int value)
 {
-    if(isWithinBounds(row, column))
+    if(IsWithinBounds(row, column))
     {
         cells[row][column] = value;
     }
@@ -23,16 +23,16 @@ void Grid::SetValue(int row, int column, int value)
 
 int Grid::GetValue(int row, int column)
 {
-    if(isWithinBounds(row, columns))
+    if(IsWithinBounds(row, column))
     {
         return cells[row][column];
     }
     return 0;
 }
 
-bool Grid::isWithinBounds(int row, int column)
+bool Grid::IsWithinBounds(int row, int column)
 {
-        if(row >= 0 && row < rows && column >= 0 && column < columns)
+    if(row >= 0 && row < rows && column >= 0 && column < columns)
     {
         return true;
     }
@@ -41,7 +41,7 @@ bool Grid::isWithinBounds(int row, int column)
 
 void Grid::FillRandom()
 {
-    for(int row = 0; row < rows; row++)
+    for(int row = 0; row < rows; row ++)
     {
         for(int column = 0; column < columns; column++)
         {
@@ -64,9 +64,8 @@ void Grid::Clear()
 
 void Grid::ToggleCell(int row, int column)
 {
-    if (isWithinBounds(row, column))
+    if(IsWithinBounds(row, column))
     {
-        cells[row][column] = !cells[row][column]
+        cells[row][column] = !cells[row][column];
     }
-    
 }
