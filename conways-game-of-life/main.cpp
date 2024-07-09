@@ -28,6 +28,16 @@ int main(){
             simulation.Stop();
             SetWindowTitle("Game of Life is Paused");
         }
+        else if (IsKeyPressed(KEY_F))
+        {
+            FPS += 2;
+            SetTargetFPS(FPS);
+        }
+        else if (IsKeyPressed(KEY_S))
+        {
+            FPS -= 2;
+            SetTargetFPS(FPS);
+        }
         
 
         //Updating State
