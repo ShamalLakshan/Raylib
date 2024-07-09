@@ -6,3 +6,10 @@
 
 ## Preview
 ![Screenshot](./screenshot.png)
+
+## Controls
+Enter - Play
+Space - Pause
+R - Randomize
+C - Clear
+LeftMouseButton - Toggle Cell State
