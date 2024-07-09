@@ -30,8 +30,8 @@ int Simulation::CountLiveNeighbors(int row, int column)
 
     for(const auto& offset : neighborOffsets)
     {
-        int neighborRow = row + offset.first;
-        int neighborColumn = column + offset.second;
+        int neighborRow = (row + offset.first + grid.GetRows()) % grid.GetRows();
+        int neighborColumn = (column + offset.second + grid.GetColumns()) % grid.GetColumns();
         liveNeighbors += grid.GetValue(neighborRow, neighborColumn);
     }
     return liveNeighbors;

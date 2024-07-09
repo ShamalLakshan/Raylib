@@ -15,12 +15,12 @@ int main(){
 
     Simulation simulation{WINDOW_WIDTH, WINDOW_HEIGHT, CELL_SIZE};
 
-    simulation.SetCellValue(3, 4, 1);
-    simulation.SetCellValue(3, 5, 1);
-    simulation.SetCellValue(4, 4, 1);
-    simulation.SetCellValue(2, 4, 1);
+    simulation.SetCellValue(5, 29, 1);
+    simulation.SetCellValue(6, 0, 1);
+    simulation.SetCellValue(5, 0, 1);
+    simulation.SetCellValue(4, 0, 1);
 
-    std::cout << simulation.CountLiveNeighbors(3, 4) << std::endl;
+    std::cout << simulation.CountLiveNeighbors(5, 29) << std::endl;
 
     while(WindowShouldClose() == false){
         BeginDrawing();
