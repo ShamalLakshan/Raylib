@@ -25,8 +25,9 @@ int Grid::GetValue(int row, int column)
 {
     if(isWithinBounds(row, columns))
     {
-        
+        return cells[row][column];
     }
+    return 0;
 }
 
 bool Grid::isWithinBounds(int row, int column)

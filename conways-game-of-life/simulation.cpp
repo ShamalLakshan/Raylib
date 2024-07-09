@@ -32,5 +32,7 @@ int Simulation::CountLiveNeighbors(int row, int column)
     {
         int neighborRow = row + offset.first;
         int neighborColumn = column + offset.second;
+        liveNeighbors += grid.GetValue(neighborRow, neighborColumn);
     }
+    return liveNeighbors;
 }
