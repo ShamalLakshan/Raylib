@@ -45,8 +45,8 @@ void Grid::FillRandom()
     {
         for(int column = 0; column < columns; column++)
         {
-            int randomValue = GetRandomValue(0, 1);
-            cells[row][column] = randomValue;
+            int randomValue = GetRandomValue(0, 4);
+            cells[row][column] = (randomValue == 4) ? 1 : 0;
         }
     }
 }
