@@ -36,3 +36,14 @@ int Simulation::CountLiveNeighbors(int row, int column)
     }
     return liveNeighbors;
 }
+
+void Simulation::Update()
+{
+    for(int row = 0; row < grid.GetRows(); row++)
+    {
+        for(int column = 0; column < grid.GetColumns(); column++)
+        {
+            
+        }
+    }
+}
