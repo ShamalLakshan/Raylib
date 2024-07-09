@@ -13,11 +13,14 @@ int main(){
     SetTargetFPS(FPS);
 
     Grid grid{WINDOW_WIDTH, WINDOW_HEIGHT, CELL_SIZE};
+    grid.SetValue(0, 0, 1);
 
     while(WindowShouldClose() == false){
         BeginDrawing();
         ClearBackground(GREY);
+
         grid.Draw();
+        
         EndDrawing();
     }
 
